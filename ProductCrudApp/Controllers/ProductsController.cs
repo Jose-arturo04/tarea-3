@@ -16,6 +16,7 @@ namespace ProductCrudApp.Controllers
             _context = context;
         }
 
+        // POST: api/products
         // POST: api/products (El que ya teníamos)
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
@@ -25,6 +26,7 @@ namespace ProductCrudApp.Controllers
             return Ok(product);
         }
 
+        // GET: api/products
         // GET: api/products (El nuevo para esta rama)
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
@@ -32,6 +34,16 @@ namespace ProductCrudApp.Controllers
             return await _context.Products.ToListAsync();
         }
 
+        // DELETE: api/products/5 (El código del Hotfix)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) return NotFound();
+
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            return NoContent();
         // GET: api/products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
